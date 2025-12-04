@@ -9,14 +9,18 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func Connect() (*sql.DB, error) {
+func ConnectPostgreSQL() (*sql.DB, error) {
+	log.Println("Loading PostgreSQL config...")
 	dbConfig, err := configs.LoadPgConfig()
 
+	log.Println("Making connection string...")
 	connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		dbConfig.Host, dbConfig.Port, dbConfig.User, dbConfig.Password, dbConfig.DbName, dbConfig.SSLMode)
 
+	log.Println("Opening connection...")
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
+
 		return nil, fmt.Errorf("failed to open database: %v", err)
 	}
 
